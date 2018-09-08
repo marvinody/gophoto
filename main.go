@@ -2,35 +2,61 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"image"
 	"image/png"
 	"os"
+	"strings"
 
 	"bitbucket.org/marvinody/gophoto/edge"
 	"bitbucket.org/marvinody/gophoto/maxrgb"
 	"bitbucket.org/marvinody/gophoto/pixelize"
 )
 
-type filter interface {
+type Filter interface {
 	Apply(image.Image) image.Image
 }
 
 func main() {
+
+	effects := make([]Filter, 0, 10)
+
+	if len(os.Args) > 1 {
+		filterString := os.Args[1]
+		filterStrings := strings.Split(filterString, ";")
+		fmt.Fprintf(os.Stderr, "%v\n", filterStrings)
+		for _, s := range filterStrings {
+			s2 := strings.Split(s, ",")
+			s = s2[0]
+			s2 = s2[1:]
+			fmt.Fprintf(os.Stderr, "%s\n", s)
+			switch s {
+			case "maxrgb":
+				effect := maxrgb.Effect{}
+				effects = append(effects, effect)
+			case "edge":
+				effect := edge.Effect{}
+				effects = append(effects, effect)
+			case "pixelize":
+				effect := pixelize.Effect{}
+				effects = append(effects, effect)
+			}
+		}
+	}
+
 	reader := bufio.NewReader(os.Stdin)
 	img, _, err := image.Decode(reader)
 	if err != nil {
-		file, _ := os.Open("Valve_original.PNG")
+		file, _ := os.Open("shion.png")
 		img, _, _ = image.Decode(file)
 	}
 	out := applyEffectChain(img,
-		pixelize.Effect{10, 10},
-		maxrgb.Effect{},
-		edge.Effect{1},
+		effects...,
 	)
 	png.Encode(os.Stdout, out)
 }
 
-func applyEffectChain(img image.Image, filters ...filter) image.Image {
+func applyEffectChain(img image.Image, filters ...Filter) image.Image {
 	temp := img
 	for _, effect := range filters {
 		temp = effect.Apply(temp)
