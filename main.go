@@ -11,6 +11,7 @@ import (
 	"bitbucket.org/marvinody/gophoto/edge"
 	"bitbucket.org/marvinody/gophoto/maxrgb"
 	"bitbucket.org/marvinody/gophoto/pixelize"
+	"bitbucket.org/marvinody/gophoto/predator"
 )
 
 type Filter interface {
@@ -39,6 +40,9 @@ func main() {
 				effects = append(effects, effect)
 			case "pixelize":
 				effect := pixelize.Effect{}
+				effects = append(effects, effect)
+			case "predator":
+				effect := predator.Effect{}
 				effects = append(effects, effect)
 			}
 		}
