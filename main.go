@@ -8,7 +8,9 @@ import (
 	"os"
 	"strings"
 
+	"bitbucket.org/marvinody/gophoto/crystallize"
 	"bitbucket.org/marvinody/gophoto/edge"
+	"bitbucket.org/marvinody/gophoto/glasstile"
 	"bitbucket.org/marvinody/gophoto/maxrgb"
 	"bitbucket.org/marvinody/gophoto/pixelize"
 	"bitbucket.org/marvinody/gophoto/predator"
@@ -43,6 +45,12 @@ func main() {
 				effects = append(effects, effect)
 			case "predator":
 				effect := predator.Effect{}
+				effects = append(effects, effect)
+			case "crystallize":
+				effect := crystallize.Effect{20}
+				effects = append(effects, effect)
+			case "glasstile":
+				effect := glasstile.Effect{20, 20}
 				effects = append(effects, effect)
 			}
 		}
