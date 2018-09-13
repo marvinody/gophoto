@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"image"
+	"image/color"
 	"image/png"
 	"os"
 	"strings"
 
 	"bitbucket.org/marvinody/gophoto/crystallize"
+	"bitbucket.org/marvinody/gophoto/duotone"
 	"bitbucket.org/marvinody/gophoto/edge"
 	"bitbucket.org/marvinody/gophoto/glasstile"
 	"bitbucket.org/marvinody/gophoto/maxrgb"
@@ -51,6 +53,13 @@ func main() {
 				effects = append(effects, effect)
 			case "glasstile":
 				effect := glasstile.Effect{20, 20}
+				effects = append(effects, effect)
+			case "duotone":
+				effect := duotone.Effect{}.SetLowColor(color.RGBA{
+					235, 139, 35, 255,
+				}).SetHighColor(color.RGBA{
+					0, 0, 0, 255,
+				})
 				effects = append(effects, effect)
 			}
 		}
