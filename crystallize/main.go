@@ -55,6 +55,12 @@ func (e Effect) Apply(img image.Image) image.Image {
 		for x := 0; x < size.X; x += maxGridSpacing {
 			// voronoi pixel for this region
 			vx, vy := pick(x, y)
+			if vx >= size.X {
+				vx = size.X - 1
+			}
+			if vy >= size.Y {
+				vy = size.Y - 1
+			}
 			idx, err := tree.Insert([]float64{float64(vx), float64(vy)})
 			if err != nil {
 				panic(err)
