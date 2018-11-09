@@ -16,6 +16,7 @@ import (
 	"bitbucket.org/marvinody/gophoto/maxrgb"
 	"bitbucket.org/marvinody/gophoto/pixelize"
 	"bitbucket.org/marvinody/gophoto/predator"
+	"bitbucket.org/marvinody/gophoto/tablify"
 )
 
 type Filter interface {
@@ -60,6 +61,10 @@ func main() {
 				}).SetHighColor(color.RGBA{
 					0, 0, 0, 255,
 				})
+				effects = append(effects, effect)
+
+			case "tablify":
+				effect := tablify.Effect{BG: color.Gray16{0xffff}, Tol: 40}
 				effects = append(effects, effect)
 			}
 		}
