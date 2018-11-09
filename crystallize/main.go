@@ -48,7 +48,7 @@ func (e Effect) Apply(img image.Image) image.Image {
 		return x + xr, y + yr
 	}
 	tree := &kdtree.KDTree{}
-	indToVoronoi := make(map[int]voronoi)
+	indToVoronoi := make(map[string]voronoi)
 	// so iterate over and create the "regions" we want
 	fmt.Fprintf(os.Stderr, "Starting Voronoi Partitioning\n")
 	for y := 0; y < size.Y; y += maxGridSpacing {
@@ -65,7 +65,8 @@ func (e Effect) Apply(img image.Image) image.Image {
 			if err != nil {
 				panic(err)
 			}
-			indToVoronoi[idx] = voronoi{idx: idx, x: vx, y: vy, color: img.At(vx, vy)}
+			key := fmt.Sprintf("(%d,%d)", x, y)
+			indToVoronoi[key] = voronoi{idx: idx, x: vx, y: vy, color: img.At(vx, vy)}
 		}
 	}
 	tree.Balance()
@@ -84,8 +85,9 @@ func (e Effect) Apply(img image.Image) image.Image {
 				reminders += 1
 			}
 			tuple := []float64{float64(x), float64(y)}
-			nearest := tree.FindNearestNeighborInd(tuple)
-			v := indToVoronoi[nearest]
+			nearest := tree.FindNearestNeighbor(tuple)
+			key := fmt.Sprintf("(%d,%d)", int(nearest[0]), int(nearest[1]))
+			v := indToVoronoi[key]
 			crystal.Set(x, y, v.color)
 		}
 	}
