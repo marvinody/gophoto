@@ -1,11 +1,9 @@
 package tablify
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"math"
-	"os"
 )
 
 type Effect struct {
@@ -30,7 +28,6 @@ func (e Effect) Apply(img image.Image) image.Image {
 
 	for _, line := range rects {
 		for _, rect := range line {
-			fmt.Fprintf(os.Stderr, "%v\n", rect)
 			for x := rect.x; x < rect.x+rect.width; x += 1 {
 				for y := rect.y; y < rect.y+rect.height; y += 1 {
 					out.Set(2*x, 2*y, rect.color)
